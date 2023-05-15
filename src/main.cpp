@@ -34,5 +34,10 @@ int main(int argc, char** argv)
 
     Machine machine(12);
 
+    while (1)
+    {
+        machine.cpu->execute(1);
+    }
+
     return 0;
 }
