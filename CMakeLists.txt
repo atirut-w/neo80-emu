@@ -1,6 +1,7 @@
 project(NeoZEmu)
 add_executable(neoz-emu
     src/main.cpp
+    src/machine.cpp
 )
 target_include_directories(neoz-emu PRIVATE include)
 

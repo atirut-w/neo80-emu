@@ -1,5 +1,7 @@
 #include <iostream>
+#include <fstream>
 #include <argparse/argparse.hpp>
+#include <machine.hpp>
 
 using namespace argparse;
 
@@ -29,6 +31,8 @@ int main(int argc, char** argv)
         std::cout << program;
         exit(0);
     }
+
+    Machine machine(12);
 
     return 0;
 }
