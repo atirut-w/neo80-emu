@@ -1,0 +1,3 @@
+[submodule "3rd/z80"]
+	path = 3rd/z80
+	url = https://github.com/suzukiplan/z80
