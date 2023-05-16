@@ -1,4 +1,5 @@
 #include <machine.hpp>
+#include <iostream>
 
 int get_real_address(uint8_t bankmap[16], uint16_t address)
 {
@@ -35,12 +36,17 @@ uint8_t in(void *context, uint16_t address)
 
 void out(void *context, uint16_t address, uint8_t value)
 {
-    
+    switch (address)
+    {
+    case 0:
+        std::cout << value << std::endl;
+        break;
+    }
 }
 
 Machine::Machine(uint8_t bank_count)
 {
-    cpu = new Z80(read, write, in, out, this);
+    cpu = new Z80(read, write, in, out, this, true);
     ram = new uint8_t[4096 * bank_count];
     this->bank_count = bank_count;
 }
