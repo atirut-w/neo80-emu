@@ -10,9 +10,10 @@ int get_real_address(uint8_t bankmap[16], uint16_t address)
 uint8_t read(void *context, uint16_t address)
 {
     Machine *machine = (Machine *)context;
-    if (get_real_address(machine->bankmap, address) < 4096 * machine->bank_count)
+    if (get_real_address(machine->bankmap, address) < machine->address_limit)
     {
-        return machine->ram[get_real_address(machine->bankmap, address)];
+        uint8_t value = machine->ram[get_real_address(machine->bankmap, address)];
+        return value;
     }
     else
     {
@@ -23,7 +24,7 @@ uint8_t read(void *context, uint16_t address)
 void write(void *context, uint16_t address, uint8_t value)
 {
     Machine *machine = (Machine *)context;
-    if (get_real_address(machine->bankmap, address) < 4096 * machine->bank_count)
+    if (get_real_address(machine->bankmap, address) < machine->address_limit)
     {
         machine->ram[get_real_address(machine->bankmap, address)] = value;
     }
@@ -49,6 +50,7 @@ Machine::Machine(uint8_t bank_count)
     cpu = new Z80(read, write, in, out, this, true);
     ram = new uint8_t[4096 * bank_count];
     this->bank_count = bank_count;
+    address_limit = 4096 * bank_count;
 }
 
 Machine::~Machine()
