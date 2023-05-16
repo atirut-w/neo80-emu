@@ -37,7 +37,7 @@ uint8_t in(void *context, uint16_t address)
 
 void out(void *context, uint16_t address, uint8_t value)
 {
-    switch (address)
+    switch (address & 0xFF)
     {
     case 0:
         std::cout << value << std::endl;
