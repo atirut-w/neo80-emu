@@ -5,6 +5,13 @@
 
 using namespace argparse;
 
+uint8_t initram[] = {
+    // LD A, 'a'
+    0x3E, 0x61,
+    // OUT (0), A
+    0xD3, 0x00,
+};
+
 int main(int argc, char** argv)
 {
     ArgumentParser program("neoz-emu");
@@ -33,6 +40,11 @@ int main(int argc, char** argv)
     }
 
     Machine machine(12);
+
+    for (int i = 0; i < sizeof(initram); i++)
+    {
+        machine.ram[i] = initram[i];
+    }
 
     while (1)
     {
