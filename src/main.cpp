@@ -47,7 +47,7 @@ int main(int argc, char** argv)
         std::ifstream rom(program.get<std::string>("--rom"), std::ios::binary);
         if (rom.is_open())
         {
-            rom.read((char *)machine.ram[0], 4096);
+            rom.read((char *)machine.rom, 4096);
             rom.close();
         }
         else
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
     }
     else
     {
-        memcpy(machine.ram[0], initram, sizeof(initram));
+        memcpy(machine.rom, initram, sizeof(initram));
     }
 
     while (1)
