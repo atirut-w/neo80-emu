@@ -43,7 +43,7 @@ int main(int argc, char** argv)
 
     for (int i = 0; i < sizeof(initram); i++)
     {
-        machine.ram[i] = initram[i];
+        machine.ram[0][i] = initram[i];
     }
 
     while (1)

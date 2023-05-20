@@ -1,19 +1,17 @@
 #include <machine.hpp>
 #include <iostream>
 
-int get_real_address(uint8_t bankmap[16], uint16_t address)
+uint8_t get_real_bank(uint8_t bankmap[16], uint16_t address)
 {
-    uint8_t bank = bankmap[address >> 12];
-    return (bank * 4096) + (address & 0xFFF);
+    return bankmap[address >> 12];
 }
 
 uint8_t read(void *context, uint16_t address)
 {
     Machine *machine = (Machine *)context;
-    if (get_real_address(machine->bankmap, address) < machine->address_limit)
+    if (machine->ram[get_real_bank(machine->bankmap, address)] != nullptr)
     {
-        uint8_t value = machine->ram[get_real_address(machine->bankmap, address)];
-        return value;
+        return machine->ram[get_real_bank(machine->bankmap, address)][address & 0xFFF];
     }
     else
     {
@@ -24,9 +22,9 @@ uint8_t read(void *context, uint16_t address)
 void write(void *context, uint16_t address, uint8_t value)
 {
     Machine *machine = (Machine *)context;
-    if (get_real_address(machine->bankmap, address) < machine->address_limit)
+    if (machine->ram[get_real_bank(machine->bankmap, address)] != nullptr)
     {
-        machine->ram[get_real_address(machine->bankmap, address)] = value;
+        machine->ram[get_real_bank(machine->bankmap, address)][address & 0xFFF] = value;
     }
 }
 
@@ -48,13 +46,22 @@ void out(void *context, uint16_t address, uint8_t value)
 Machine::Machine(uint8_t bank_count)
 {
     cpu = new Z80(read, write, in, out, this, true);
-    ram = new uint8_t[4096 * bank_count];
-    this->bank_count = bank_count;
-    address_limit = 4096 * bank_count;
+    
+    for (uint8_t i = 0; i < bank_count; i++)
+    {
+        ram[i] = new uint8_t[4096];
+    }
 }
 
 Machine::~Machine()
 {
     delete cpu;
-    delete[] ram;
+    
+    for (uint8_t i = 0; i < 16; i++)
+    {
+        if (ram[i] != nullptr)
+        {
+            delete[] ram[i];
+        }
+    }
 }
