@@ -39,7 +39,7 @@ int main(int argc, char** argv)
         exit(0);
     }
 
-    Machine machine(12);
+    Machine machine(1);
 
     if (program.get<std::string>("--rom") != "")
     {
