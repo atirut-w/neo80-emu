@@ -27,7 +27,7 @@ uint8_t read(void *context, uint16_t address)
 void write(void *context, uint16_t address, uint8_t value)
 {
     Machine *machine = (Machine *)context;
-    if (machine->ram[get_real_bank(machine->bankmap, address)] != nullptr)
+    if (machine->ram[get_real_bank(machine->bankmap, address)] != nullptr && get_real_bank(machine->bankmap, address) != 0xff)
     {
         machine->ram[get_real_bank(machine->bankmap, address)][address & 0xFFF] = value;
     }
