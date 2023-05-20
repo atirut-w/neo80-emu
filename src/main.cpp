@@ -17,7 +17,8 @@ int main(int argc, char** argv)
     ArgumentParser program("neo80-emu");
 
     program.add_argument("-r", "--rom")
-        .help("path to the ROM file");
+        .help("path to the ROM file")
+        .default_value("");
     
     program.add_argument("-m", "--memory")
         .help("amount of memory available in units of 4KiB banks");
@@ -41,9 +42,23 @@ int main(int argc, char** argv)
 
     Machine machine(12);
 
-    for (int i = 0; i < sizeof(initram); i++)
+    if (program.get<std::string>("--rom") != "")
     {
-        machine.ram[0][i] = initram[i];
+        std::ifstream rom(program.get<std::string>("--rom"), std::ios::binary);
+        if (rom.is_open())
+        {
+            rom.read((char *)machine.ram[0], 4096);
+            rom.close();
+        }
+        else
+        {
+            std::cout << "Failed to open ROM file" << std::endl;
+            exit(1);
+        }
+    }
+    else
+    {
+        memcpy(machine.ram[0], initram, sizeof(initram));
     }
 
     while (1)
