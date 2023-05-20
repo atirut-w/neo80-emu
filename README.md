@@ -1,2 +1,2 @@
-# NeoZ Emulator
+# Neo80 Emulator
 WIP

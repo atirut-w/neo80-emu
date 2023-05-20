@@ -14,7 +14,7 @@ uint8_t initram[] = {
 
 int main(int argc, char** argv)
 {
-    ArgumentParser program("neoz-emu");
+    ArgumentParser program("neo80-emu");
 
     program.add_argument("-r", "--rom")
         .help("path to the ROM file");
