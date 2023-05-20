@@ -9,7 +9,12 @@ uint8_t get_real_bank(uint8_t bankmap[16], uint16_t address)
 uint8_t read(void *context, uint16_t address)
 {
     Machine *machine = (Machine *)context;
-    if (machine->ram[get_real_bank(machine->bankmap, address)] != nullptr)
+
+    if (get_real_bank(machine->bankmap, address) == 0xff)
+    {
+        return machine->rom[address & 0xFFF];
+    }
+    else if (machine->ram[get_real_bank(machine->bankmap, address)] != nullptr)
     {
         return machine->ram[get_real_bank(machine->bankmap, address)][address & 0xFFF];
     }
