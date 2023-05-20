@@ -38,7 +38,7 @@ void out(void *context, uint16_t address, uint8_t value)
     switch (address & 0xFF)
     {
     case 0:
-        std::cout << value << std::endl;
+        std::cout << value << std::flush;
         break;
     }
 }
